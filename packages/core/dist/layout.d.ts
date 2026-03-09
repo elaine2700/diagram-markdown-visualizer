@@ -1,4 +1,4 @@
-import { TreeNode } from './index';
+import { TreeNode } from './parser';
 export interface Point {
     x: number;
     y: number;
@@ -8,6 +8,7 @@ export interface LayoutNode extends Point {
     title: string;
     content: string;
     depth: number;
+    hasChildren: boolean;
 }
 export interface LayoutLink {
     source: LayoutNode;

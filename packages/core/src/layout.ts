@@ -11,6 +11,7 @@ export interface LayoutNode extends Point {
     title: string;
     content: string;
     depth: number;
+    hasChildren: boolean;
 }
 
 export interface LayoutLink {
@@ -49,6 +50,7 @@ export function calculateLayout(rootNode: TreeNode, radiusConfig: number): Layou
             title: d.data.title,
             content: d.data.content,
             depth: d.depth,
+            hasChildren: !!d.children && d.children.length > 0,
             x: radius * Math.cos(angle),
             y: radius * Math.sin(angle),
         };
