@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { calculateLayout } from './layout';
-import { parseToTree } from './index';
+import { parseToTree } from './parser';
 
 describe('calculateLayout', () => {
     it('should generate nodes and links for a simple tree', () => {

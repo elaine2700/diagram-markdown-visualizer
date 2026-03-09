@@ -1,5 +1,5 @@
 import { hierarchy, tree } from 'd3-hierarchy';
-import { TreeNode } from './index';
+import { TreeNode } from './parser';
 
 export interface Point {
     x: number;

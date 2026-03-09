@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { parseToTree, TreeNode } from './index';
+import { parseToTree } from './index';
 
 describe('parseToTree', () => {
     it('should parse a basic hierarchy correctly', () => {
