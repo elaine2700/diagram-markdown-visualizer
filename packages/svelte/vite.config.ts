@@ -1,4 +1,3 @@
-// @ts-expect-error missing type
 import { defineConfig } from 'vitest/config';
 import { playwright } from '@vitest/browser-playwright';
 import { sveltekit } from '@sveltejs/kit/vite';

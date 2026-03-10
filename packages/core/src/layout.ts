@@ -1,5 +1,5 @@
 import { hierarchy, tree } from 'd3-hierarchy';
-import { TreeNode } from './parser';
+import { TreeNode } from './parser.js';
 
 export interface Point {
     x: number;
@@ -24,13 +24,67 @@ export interface LayoutResult {
     links: LayoutLink[];
 }
 
-export function calculateLayout(rootNode: TreeNode, radiusConfig: number): LayoutResult {
+export interface LayoutOptions {
+    cardWidth?: number;
+    cardHeight?: number;
+}
+
+export function calculateLayout(rootNode: TreeNode, options: LayoutOptions): LayoutResult {
+    let cardWidth = 0;
+    let cardHeight = 0;
+
+    if (options) {
+        cardWidth = options.cardWidth ?? 0;
+        cardHeight = options.cardHeight ?? 0;
+    }
+
     // 1. Create hierarchy
     const root = hierarchy(rootNode, d => d.children);
 
+    let maxDepth = 0;
+    const nodesPerDepth = new Map<number, number>();
+
+    root.each(d => {
+        if (d.depth > maxDepth) maxDepth = d.depth;
+        nodesPerDepth.set(d.depth, (nodesPerDepth.get(d.depth) || 0) + 1);
+    });
+
+    let rx = 1;
+    let ry = 1;
+
+    if (!(cardWidth > 0 && cardHeight > 0 && maxDepth > 0)) {
+        return { nodes: [], links: [] };
+    }
+
+    const paddingX = 40;
+    const paddingY = 80;
+    const maxDim = Math.max(cardWidth, cardHeight);
+
+    rx = cardWidth / maxDim;
+    ry = cardHeight / maxDim;
+
+    const assumedPadding = Math.max(paddingX, paddingY);
+    let requiredRadius = maxDepth * (maxDim + assumedPadding); // base radial spacing
+
+    for (const [depth, count] of nodesPerDepth.entries()) {
+        if (depth === 0) continue;
+        // Add a multiplier to compensate for d3 tree not distributing nodes perfectly evenly
+        // Some branches might be denser, so we add a little extra space.
+        const requiredCircumference = count * (maxDim + assumedPadding) * 1.5;
+        const r_depth = requiredCircumference / (2 * Math.PI);
+        const r_max_for_depth = r_depth * (maxDepth / depth);
+        if (r_max_for_depth > requiredRadius) {
+            requiredRadius = r_max_for_depth;
+        }
+    }
+
+    let radiusConfig = requiredRadius
+
     // 2. Setup tree layout mapped to polar coordinates
     // size[0] is the angle (0 to 2π), size[1] is the max radius
-    const treeLayout = tree<TreeNode>().size([2 * Math.PI, radiusConfig]);
+    const treeLayout = tree<TreeNode>()
+        .size([2 * Math.PI, radiusConfig])
+        .separation((a, b) => (a.parent === b.parent ? 1 : 2) / a.depth);
 
     // 3. Apply layout
     treeLayout(root);
@@ -51,8 +105,8 @@ export function calculateLayout(rootNode: TreeNode, radiusConfig: number): Layou
             content: d.data.content,
             depth: d.depth,
             hasChildren: !!d.children && d.children.length > 0,
-            x: radius * Math.cos(angle),
-            y: radius * Math.sin(angle),
+            x: radius * Math.cos(angle) * rx,
+            y: radius * Math.sin(angle) * ry,
         };
 
         layoutNodesMap.set(d, layoutNode);
@@ -75,3 +129,4 @@ export function calculateLayout(rootNode: TreeNode, radiusConfig: number): Layou
 
     return { nodes, links };
 }
+

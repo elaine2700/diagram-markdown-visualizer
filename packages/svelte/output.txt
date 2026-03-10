@@ -1,0 +1,15 @@
+
+> @diagram_markdown_visualizer/svelte@0.0.1 check
+> svelte-kit sync && svelte-check --tsconfig ./tsconfig.json
+
+Loading svelte-check in workspace: c:\Users\Elaine\Documents\Projects\Repos\diagram-markdown-visualizer\packages\svelte
+Getting Svelte diagnostics...
+
+c:\Users\Elaine\Documents\Projects\Repos\diagram-markdown-visualizer\packages\svelte\[32mvite.config.ts[39m:1:1
+[31mError[39m: Unused '@ts-expect-error' directive. 
+[36m[35m// @ts-expect-error missing type[36m
+import { defineConfig } from 'vitest/config';[39m
+
+====================================
+[31msvelte-check found 1 error and 0 warnings in 1 file
+[39m
