@@ -1,11 +1,11 @@
 <script lang="ts">
-    import {
-        calculateLayout,
-        type TreeNode,
-        type LayoutNode,
-        type LayoutLink,
-    } from "core";
+    import { calculateLayout, type TreeNode } from "core";
 
+    // TODO: Set a dynamic radius based on the size of the tree.
+    // TODO: Add option to see the content of the nodes with a button to collapse/expand.
+    // TODO: Add option to change the node format, circle or rectangle.
+    // TODO: Add formattting css
+    // TODO: Add classes and document them to customize the nodes.
     let { tree, radius = 500 }: { tree: TreeNode; radius?: number } = $props();
 
     let layout = $derived(calculateLayout(tree, radius));
