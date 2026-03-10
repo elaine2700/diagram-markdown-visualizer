@@ -1,11 +1,13 @@
 <script lang="ts">
-    import { calculateRadialLayout, type TreeNode } from "core";
+    import { calculateForceLayout, type TreeNode } from "core";
     import { solidColors } from "./themes.js";
+    import { drag } from "d3-drag";
+    import { select } from "d3-selection";
 
     let {
         tree,
-        title = "Graph title",
-        showContent = false,
+        title = "Diagram title",
+        showContent = true,
         cardWidth = 200,
         cardHeight = 50,
         visualPadding = 10,
@@ -23,55 +25,83 @@
     } = $props();
 
     let layout = $derived(
-        calculateRadialLayout(tree, { cardWidth, cardHeight }),
+        calculateForceLayout(tree, { cardWidth, cardHeight, nodeShape }),
     );
     let nodes = $derived(layout.nodes);
     let links = $derived(layout.links);
 
-    let minX = $derived(
+    let tickCounter = $state(0);
+
+    $effect(() => {
+        let sim = layout.simulation;
+        if (sim) {
+            sim.on("tick", () => {
+                tickCounter++;
+            });
+        }
+        return () => {
+            if (sim) {
+                sim.on("tick", null);
+            }
+        };
+    });
+
+    function draggable(nodeElement: SVGElement, nodeData: any) {
+        let sim = layout.simulation;
+        const d3_drag = drag()
+            .on("start", (event: any) => {
+                if (!event.active) sim.alphaTarget(0.3).restart();
+                nodeData.fx = nodeData.x;
+                nodeData.fy = nodeData.y;
+            })
+            .on("drag", (event: any) => {
+                nodeData.fx = event.x;
+                nodeData.fy = event.y;
+            })
+            .on("end", (event: any) => {
+                if (!event.active) sim.alphaTarget(0);
+                nodeData.fx = null;
+                nodeData.fy = null;
+            });
+
+        select(nodeElement).call(d3_drag as any);
+        return {
+            destroy() {
+                select(nodeElement).on(".drag", null);
+            },
+        };
+    }
+
+    let maxExtent = $derived(
         nodes.length > 0
-            ? Math.min(...nodes.map((n) => n.x)) -
-                  (cardWidth / 2 + visualPadding)
-            : 0,
-    );
-    let maxX = $derived(
-        nodes.length > 0
-            ? Math.max(...nodes.map((n) => n.x)) +
-                  (cardWidth / 2 + visualPadding)
-            : 0,
-    );
-    let minY = $derived(
-        nodes.length > 0
-            ? Math.min(...nodes.map((n) => n.y)) -
-                  (cardHeight / 2 + visualPadding)
-            : 0,
-    );
-    let maxY = $derived(
-        nodes.length > 0
-            ? Math.max(...nodes.map((n) => n.y)) +
-                  (cardHeight / 2 + visualPadding)
-            : 0,
+            ? Math.max(
+                  ...nodes.map(
+                      (n: any) =>
+                          Math.max(Math.abs(n.x), Math.abs(n.y)) +
+                          (n.size ?? Math.max(cardWidth, cardHeight)) / 2,
+                  ),
+              ) + visualPadding
+            : 10,
     );
 
-    let viewBoxWidth = $derived(Math.max(maxX - minX, 10));
-    let viewBoxHeight = $derived(Math.max(maxY - minY, 10));
+    let viewBoxDim = $derived(maxExtent * 2);
 
     let themeColors = $derived(theme);
 </script>
 
 <svg
-    width={viewBoxWidth}
-    height={viewBoxHeight}
-    viewBox="{minX} {minY} {viewBoxWidth} {viewBoxHeight}"
+    width={viewBoxDim}
+    height={viewBoxDim}
+    viewBox="{-maxExtent} {-maxExtent} {viewBoxDim} {viewBoxDim}"
 >
     <!-- Links -->
     <g>
         {#each links as link (link.source.id + "-" + link.target.id)}
             <line
-                x1={link.source.x}
-                y1={link.source.y}
-                x2={link.target.x}
-                y2={link.target.y}
+                x1={link.source.x + (tickCounter ? 0 : 0)}
+                y1={link.source.y + (tickCounter ? 0 : 0)}
+                x2={link.target.x + (tickCounter ? 0 : 0)}
+                y2={link.target.y + (tickCounter ? 0 : 0)}
                 stroke="#999"
                 stroke-width="1.5"
                 stroke-opacity="0.6"
@@ -81,12 +111,17 @@
         <!-- Nodes -->
 
         {#each nodes as node (node.id)}
-            <g transform="translate({node.x},{node.y})">
+            <g
+                transform="translate({node.x + (tickCounter ? 0 : 0)},{node.y +
+                    (tickCounter ? 0 : 0)})"
+                use:draggable={node}
+                style="cursor: grab;"
+            >
                 <foreignObject
-                    x={-(cardWidth / 2)}
-                    y={-(cardHeight / 2)}
-                    width={cardWidth}
-                    height={cardHeight}
+                    x={-((node.size ?? cardWidth) / 2)}
+                    y={-((node.size ?? cardHeight) / 2)}
+                    width={node.size ?? cardWidth}
+                    height={node.size ?? cardHeight}
                 >
                     <div
                         xmlns="http://www.w3.org/1999/xhtml"
@@ -128,7 +163,6 @@
         flex-direction: column;
         font-family: sans-serif;
         justify-content: center;
-        overflow-y: auto;
         padding: 0.5rem;
         transition: transform 0.2s ease;
     }
@@ -145,16 +179,11 @@
         font-size: 12px;
         font-weight: bold;
         margin-bottom: 0.25rem;
-        white-space: nowrap;
         flex-shrink: 0;
     }
 
     .node-desc {
         font-size: 10px;
-        /* display: -webkit-box;
-        -webkit-line-clamp: 4;
-        line-clamp: 4;
-        -webkit-box-orient: vertical; */
         line-height: 1.2;
         white-space: pre-wrap;
     }

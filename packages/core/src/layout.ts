@@ -1,4 +1,5 @@
 import { hierarchy, tree } from 'd3-hierarchy';
+import { forceSimulation, forceManyBody, forceCenter, forceLink, forceCollide } from 'd3-force';
 import { TreeNode } from './parser.js';
 
 export interface Point {
@@ -12,6 +13,7 @@ export interface LayoutNode extends Point {
     content: string;
     depth: number;
     hasChildren: boolean;
+    size?: number;
 }
 
 export interface LayoutLink {
@@ -22,14 +24,16 @@ export interface LayoutLink {
 export interface LayoutResult {
     nodes: LayoutNode[];
     links: LayoutLink[];
+    simulation?: any;
 }
 
 export interface LayoutOptions {
     cardWidth?: number;
     cardHeight?: number;
+    nodeShape?: "ellipse" | "rectangle";
 }
 
-export function calculateLayout(rootNode: TreeNode, options: LayoutOptions): LayoutResult {
+export function calculateRadialLayout(rootNode: TreeNode, options: LayoutOptions): LayoutResult {
     let cardWidth = 0;
     let cardHeight = 0;
 
@@ -130,3 +134,54 @@ export function calculateLayout(rootNode: TreeNode, options: LayoutOptions): Lay
     return { nodes, links };
 }
 
+export function calculateForceLayout(rootNode: TreeNode, options: LayoutOptions): LayoutResult {
+    let cardWidth = options?.cardWidth ?? 0;
+    let cardHeight = options?.cardHeight ?? 0;
+    
+    const root = hierarchy(rootNode);
+    const nodes: LayoutNode[] = root.descendants().map((d, i) => {
+        let titleLen = d.data.title ? d.data.title.length : 0;
+        let contentLen = d.data.content ? d.data.content.length : 0;
+        
+        let minSize = 80;
+        let baseArea = (titleLen * 12 * 14) + (contentLen * 8 * 12) + 2000;
+        let size = Math.max(Math.sqrt(baseArea), minSize);
+        
+        if (options?.nodeShape === "ellipse") {
+            size *= Math.SQRT2;
+        }
+
+        return {
+            id: `node-${i}`,
+            title: d.data.title,
+            content: d.data.content,
+            depth: d.depth,
+            hasChildren: !!d.children && d.children.length > 0,
+            x: 0,
+            y: 0,
+            size: size
+        };
+    });
+
+    const layoutNodesMap = new Map();
+    root.descendants().forEach((d, i) => layoutNodesMap.set(d, nodes[i]));
+
+    const links: LayoutLink[] = root.links().map(link => ({
+        source: layoutNodesMap.get(link.source),
+        target: layoutNodesMap.get(link.target)
+    }));
+
+    const simulation = forceSimulation(nodes as any)
+        .force("charge", forceManyBody().strength(-500))
+        .force("link", forceLink(links as any).distance((d: any) => {
+            const avgSize = (d.source.size + d.target.size) / 2;
+            return avgSize + 50;
+        }))
+        .force("center", forceCenter(0, 0))
+        .force("collide", forceCollide().radius((d: any) => (d.size ?? Math.max(cardWidth, cardHeight)) / 2 + 10))
+        .stop();
+
+    for (let i = 0; i < 300; ++i) simulation.tick();
+
+    return { nodes, links, simulation };
+}
