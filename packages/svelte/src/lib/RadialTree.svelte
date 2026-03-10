@@ -2,9 +2,6 @@
     import { calculateLayout, type TreeNode } from "core";
     import { solidColors } from "./themes.js";
 
-    // TODO: Add option to see the content of the nodes with a button to collapse/expand.
-    // TODO: Add option to change the node format, circle or rectangle.
-    // TODO: Add formattting css
     let {
         tree,
         showContent = false,
@@ -12,6 +9,7 @@
         cardHeight = 50,
         visualPadding = 10,
         theme = solidColors,
+        nodeShape = "rectangle",
     }: {
         tree: TreeNode;
         showContent?: boolean;
@@ -19,6 +17,7 @@
         cardHeight?: number;
         visualPadding?: number;
         theme?: string[];
+        nodeShape?: "ellipse" | "rectangle";
     } = $props();
 
     let layout = $derived(calculateLayout(tree, { cardWidth, cardHeight }));
@@ -88,6 +87,7 @@
                     <div
                         xmlns="http://www.w3.org/1999/xhtml"
                         class="node-card"
+                        class:node-ellipse={nodeShape === "ellipse"}
                         style="background: {themeColors[node.depth % 7]}"
                     >
                         <div class="node-title" title={node.title}>
@@ -128,6 +128,10 @@
 
     .node-card:hover {
         transform: translateY(-1px);
+    }
+
+    .node-ellipse {
+        border-radius: 50%;
     }
 
     .node-title {
