@@ -1,6 +1,6 @@
 <script lang="ts">
-    import { calculateForceLayout, type TreeNode } from "core";
-    import { solidColors } from "./themes.js";
+    import { calculateForceLayout, type TreeNode } from "markdown-to-diagram";
+    import { solidMonochrome } from "./themes.js";
     import { drag } from "d3-drag";
     import { select } from "d3-selection";
 
@@ -11,7 +11,7 @@
         cardWidth = 200,
         cardHeight = 50,
         visualPadding = 10,
-        theme = solidColors,
+        theme = solidMonochrome,
         nodeShape = "rectangle",
     }: {
         tree: TreeNode;
@@ -47,25 +47,30 @@
     });
 
     function draggable(nodeElement: SVGElement, nodeData: any) {
-        let sim = layout.simulation;
+        let currentNodeData = nodeData;
         const d3_drag = drag()
             .on("start", (event: any) => {
-                if (!event.active) sim.alphaTarget(0.3).restart();
-                nodeData.fx = nodeData.x;
-                nodeData.fy = nodeData.y;
+                let sim = layout.simulation;
+                if (sim && !event.active) sim.alphaTarget(0.3).restart();
+                currentNodeData.fx = currentNodeData.x;
+                currentNodeData.fy = currentNodeData.y;
             })
             .on("drag", (event: any) => {
-                nodeData.fx = event.x;
-                nodeData.fy = event.y;
+                currentNodeData.fx = event.x;
+                currentNodeData.fy = event.y;
             })
             .on("end", (event: any) => {
-                if (!event.active) sim.alphaTarget(0);
-                nodeData.fx = null;
-                nodeData.fy = null;
+                let sim = layout.simulation;
+                if (sim && !event.active) sim.alphaTarget(0);
+                currentNodeData.fx = null;
+                currentNodeData.fy = null;
             });
 
         select(nodeElement).call(d3_drag as any);
         return {
+            update(newNodeData: any) {
+                currentNodeData = newNodeData;
+            },
             destroy() {
                 select(nodeElement).on(".drag", null);
             },
@@ -173,6 +178,7 @@
 
     .node-ellipse {
         border-radius: 50%;
+        padding: 1.25rem;
     }
 
     .node-title {

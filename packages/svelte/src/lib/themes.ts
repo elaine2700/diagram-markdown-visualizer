@@ -17,3 +17,13 @@ export const solidColors = [
     "#2563eb", // Level 5 - Blue (H5)
     "#059669", // Level 6 - Emerald (H6)
 ];
+
+export const solidMonochrome = [
+    "#181524ff", // Level 0 - 
+    "#2a203dff", // Level 1 - 
+    "#3c304dff", // Level 2 - 
+    "#4e405dff", // Level 3 - 
+    "#606060ff", // Level 4 - 
+    "#707070ff", // Level 5 - 
+    "#808080ff", // Level 6 - 
+];
