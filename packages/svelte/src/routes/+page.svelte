@@ -1,6 +1,6 @@
 <script lang="ts">
     import { RadialTree, ForceGraph } from "$lib/index.js";
-    import { parseToTree } from "core";
+    import { parseToTree } from "markdown-to-diagram";
 
     const markdown =
         "# Hello World\n\nThis is the first level paragraph.\n\nHello\n\nOther line.\n\nMore lines.\n\n## Second Level\n\n### Third Level\n\nContent of third level\n\n### Another third level\n\n## Another second level \n\n# Another first level\n\nThis is the second level paragraph\n\n# Testing first level";

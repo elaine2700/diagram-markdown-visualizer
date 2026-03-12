@@ -1,6 +1,7 @@
 {
-	"name": "@diagram_markdown_visualizer/svelte",
-	"version": "0.0.1",
+	"name": "markdown-to-diagram-svelte",
+	"version": "0.1.0",
+	"license": "MIT",
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build && npm run prepack",
@@ -40,11 +41,11 @@
 		"@types/d3-drag": "^3.0.7",
 		"@types/d3-selection": "^3.0.11",
 		"@vitest/browser-playwright": "^4.0.18",
-		"core": "file:../core",
+		"markdown-to-diagram": "file:../core",
 		"playwright": "^1.58.2",
 		"publint": "^0.3.17",
 		"svelte": "^5.51.0",
-		"svelte-check": "^4.4.2",
+		"svelte-check": "^4.4.5",
 		"typescript": "^5.9.3",
 		"vite": "^7.3.1",
 		"vitest": "^4.0.18",

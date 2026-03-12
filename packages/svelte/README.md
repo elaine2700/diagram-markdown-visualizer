@@ -1,65 +1,48 @@
-# Svelte library
+# markdown-to-diagram-svelte
 
-Everything you need to build a Svelte library, powered by [`sv`](https://npmjs.com/package/sv).
+This package provides Svelte components (`RadialTree` and `ForceGraph`) to visualize diagrams parsed from Markdown content using the core `markdown-to-diagram` package.
 
-Read more about creating a library [in the docs](https://svelte.dev/docs/kit/packaging).
+## Installation
 
-## Creating a project
-
-If you're seeing this, you've probably already done this step. Congrats!
-
-```sh
-# create a new project in the current directory
-npx sv create
-
-# create a new project in my-app
-npx sv create my-app
+```bash
+npm install markdown-to-diagram-svelte markdown-to-diagram
 ```
 
-To recreate this project with the same configuration:
+## Usage
 
-```sh
-# recreate this project
-npx sv@0.12.5 create --template library --types ts --add vitest="usages:unit,component" --install npm mylib
+Here is an example of how to use the components in your Svelte application:
+
+```svelte
+<script lang="ts">
+  import { parseToTree } from 'markdown-to-diagram';
+  import { RadialTree, ForceGraph } from 'markdown-to-diagram-svelte';
+
+  const markdownContent = `
+# Root Node
+- Child 1
+- Child 2
+  `;
+
+  // Parse markdown content into tree structure
+  const tree = parseToTree(markdownContent);
+</script>
+
+<main>
+  <h2>Radial Tree Visualization</h2>
+  <RadialTree {tree} />
+
+  <h2>Force Graph Visualization</h2>
+  <ForceGraph {tree} />
+</main>
 ```
 
-## Developing
+### Components
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+#### `<RadialTree>`
+Displays the parsed markdown data as a hierarchical radial tree visualization.
 
-```sh
-npm run dev
+#### `<ForceGraph>`
+Displays the parsed markdown data as a highly interactive force-directed graph.
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-Everything inside `src/lib` is part of your library, everything inside `src/routes` can be used as a showcase or preview app.
-
-## Building
-
-To build your library:
-
-```sh
-npm pack
-```
-
-To create a production version of your showcase app:
-
-```sh
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
-
-## Publishing
-
-Go into the `package.json` and give your package the desired name through the `"name"` option. Also consider adding a `"license"` field and point it to a `LICENSE` file which you can create from a template (one popular option is the [MIT license](https://opensource.org/license/mit/)).
-
-To publish your library to [npm](https://www.npmjs.com):
-
-```sh
-npm publish
-```
+## License
+MIT

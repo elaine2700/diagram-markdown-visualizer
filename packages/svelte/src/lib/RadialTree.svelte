@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { calculateRadialLayout, type TreeNode } from "core";
+    import { calculateRadialLayout, type TreeNode } from "markdown-to-diagram";
     import { solidColors } from "./themes.js";
 
     let {
