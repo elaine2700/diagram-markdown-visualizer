@@ -3,6 +3,9 @@
 	"version": "0.1.0",
 	"description": "Svelte components for visualizing markdown-to-diagram",
 	"author": "Elaine Serrano (www.elaineserrano.com)",
+	"repository": {
+		"url": "https://github.com/elaine2700/diagram-markdown-visualizer"
+	},
 	"license": "MIT",
 	"scripts": {
 		"dev": "vite dev",
