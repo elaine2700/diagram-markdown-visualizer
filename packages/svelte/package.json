@@ -1,6 +1,6 @@
 {
 	"name": "@markdown-to-diagram/svelte",
-	"version": "0.1.0",
+	"version": "1.0.0",
 	"description": "Svelte components for visualizing markdown-to-diagram",
 	"author": "Elaine Serrano (www.elaineserrano.com)",
 	"license": "MIT",
