@@ -1,0 +1,28 @@
+name: CI & Safety Checks
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  check-changeset:
+    name: Check for Changeset
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'latest'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Verify Changeset Exists
+        # This command fails if files changed but no changeset is found
+        run: npx changeset status --since=origin/main
