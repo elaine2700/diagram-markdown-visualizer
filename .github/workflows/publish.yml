@@ -26,7 +26,10 @@ jobs:
           node-version: 'latest'
 
       - name: Install Dependencies
-        run: npm ci
+        run: npm ci --include=optional
+
+      - name: Build Packages
+        run: npm run build
 
       - name: Create Release Pull Request or Publish
         id: changesets
