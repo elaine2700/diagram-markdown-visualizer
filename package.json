@@ -4,7 +4,12 @@
     "workspaces": [
         "packages/*"
     ],
+    "scripts": {
+        "prepare": "npm run build",
+        "build": "npm run build --workspaces --if-present",
+        "release": "changeset publish"
+    },
     "devDependencies": {
-        "@changesets/cli": "^2.0.0"
+        "@changesets/cli": "^2.30.0"
     }
 }
