@@ -6,10 +6,13 @@
     ],
     "scripts": {
         "prepare": "npm run build",
-        "build": "npm run build --workspaces --if-present",
+        "build": "npm run build -w @markdown-to-diagram/core && npm run build -w @markdown-to-diagram/svelte",
         "release": "changeset publish"
     },
     "devDependencies": {
         "@changesets/cli": "^2.30.0"
+    },
+    "optionalDependencies": {
+        "@rollup/rollup-linux-x64-gnu": "*"
     }
 }
