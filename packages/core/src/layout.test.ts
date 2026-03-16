@@ -1,8 +1,8 @@
 import { describe, it, expect } from 'vitest';
-import { calculateLayout } from './layout';
+import { calculateRadialLayout, LayoutOptions } from './layout';
 import { parseToTree } from './parser';
 
-describe('calculateLayout', () => {
+describe('calculateRadialLayout', () => {
     it('should generate nodes and links for a simple tree', () => {
         const markdown = `
 # Root
@@ -12,9 +12,13 @@ describe('calculateLayout', () => {
         `;
 
         const tree = parseToTree(markdown);
-        const radiusConfig = 100;
+        const radiusConfig: LayoutOptions = {
+            cardWidth: 200,
+            cardHeight: 50,
+            nodeShape: 'rectangle',
+        }
 
-        const result = calculateLayout(tree, radiusConfig);
+        const result = calculateRadialLayout(tree, radiusConfig);
 
         // Root (depth 0), Child 1 (depth 1), Grandchild 1 (depth 2), Child 2 (depth 1), and the very top 'root' parsed by the parser
         expect(result.nodes.length).toBe(5); // The parser wraps everything in a virtual "root" top node
@@ -55,8 +59,12 @@ describe('calculateLayout', () => {
         `;
 
         const tree = parseToTree(markdown);
-        const radiusConfig = 100;
-        const result = calculateLayout(tree, radiusConfig);
+        const radiusConfig: LayoutOptions = {
+            cardWidth: 200,
+            cardHeight: 50,
+            nodeShape: 'rectangle',
+        }
+        const result = calculateRadialLayout(tree, radiusConfig);
 
         // Root has 1 child ("Title"), which has 4 children ("A", "B", "C", "D")
         // Note: The tree layout spreads these children at depth 2 along the radius at angle increments.

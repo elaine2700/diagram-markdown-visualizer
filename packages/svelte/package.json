@@ -1,6 +1,8 @@
 {
-	"name": "markdown-to-diagram-svelte",
+	"name": "@markdown-to-diagram/svelte",
 	"version": "0.1.0",
+	"description": "Svelte components for visualizing markdown-to-diagram",
+	"author": "Elaine Serrano (www.elaineserrano.com)",
 	"license": "MIT",
 	"scripts": {
 		"dev": "vite dev",
@@ -15,8 +17,7 @@
 	},
 	"files": [
 		"dist",
-		"!dist/**/*.test.*",
-		"!dist/**/*.spec.*"
+		"README.md"
 	],
 	"sideEffects": [
 		"**/*.css"
@@ -41,7 +42,7 @@
 		"@types/d3-drag": "^3.0.7",
 		"@types/d3-selection": "^3.0.11",
 		"@vitest/browser-playwright": "^4.0.18",
-		"markdown-to-diagram": "file:../core",
+		"@markdown-to-diagram/core": "file:../core",
 		"playwright": "^1.58.2",
 		"publint": "^0.3.17",
 		"svelte": "^5.51.0",
@@ -57,5 +58,9 @@
 	"dependencies": {
 		"d3-drag": "^3.0.0",
 		"d3-selection": "^3.0.0"
+	},
+	"publishConfig": {
+		"access": "public",
+		"provenance": true
 	}
 }

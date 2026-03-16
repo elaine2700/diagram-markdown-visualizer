@@ -1,0 +1,10 @@
+{
+    "name": "markdown-to-diagram",
+    "private": true,
+    "workspaces": [
+        "packages/*"
+    ],
+    "devDependencies": {
+        "@changesets/cli": "^2.0.0"
+    }
+}

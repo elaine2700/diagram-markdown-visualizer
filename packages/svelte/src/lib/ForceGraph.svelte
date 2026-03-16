@@ -1,5 +1,8 @@
 <script lang="ts">
-    import { calculateForceLayout, type TreeNode } from "markdown-to-diagram";
+    import {
+        calculateForceLayout,
+        type TreeNode,
+    } from "@markdown-to-diagram/core";
     import { solidMonochrome } from "./themes.js";
     import { drag } from "d3-drag";
     import { select } from "d3-selection";

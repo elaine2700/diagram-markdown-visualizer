@@ -1,6 +1,8 @@
 {
-  "name": "markdown-to-diagram",
+  "name": "@markdown-to-diagram/core",
   "version": "0.1.0",
+  "description": "Core logic for parsing markdown into diagrams",
+  "author": "Elaine Serrano (www.elaineserrano.com)",
   "type": "module",
   "sideEffects": false,
   "main": "dist/index.js",
@@ -15,10 +17,12 @@
     "test": "vitest run",
     "build": "tsc"
   },
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "keywords": [],
-  "author": "",
   "license": "MIT",
-  "description": "",
   "dependencies": {
     "d3-force": "^3.0.0",
     "d3-hierarchy": "^3.1.2",
@@ -33,5 +37,9 @@
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3",
     "vitest": "^4.0.18"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
   }
 }
