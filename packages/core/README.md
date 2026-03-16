@@ -1,4 +1,4 @@
-# markdown-to-diagram
+# @markdown-to-diagram/core
 
 This package provides the core logic to parse markdown into visual diagrams. 
 It supports standard text layout and relationships structure.
@@ -6,7 +6,7 @@ It supports standard text layout and relationships structure.
 ## Installation
 
 ```bash
-npm install markdown-to-diagram
+npm install @markdown-to-diagram/core
 ```
 
 ## Usage
@@ -15,7 +15,7 @@ npm install markdown-to-diagram
 You can parse a Markdown string into a nested tree structure where headings define the hierarchy, and the text below them becomes the content.
 
 ```typescript
-import { parseToTree, type TreeNode } from 'markdown-to-diagram';
+import { parseToTree, type TreeNode } from '@markdown-to-diagram/core';
 
 const markdown = `
 # Main Concept

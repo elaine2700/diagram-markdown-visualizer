@@ -1,11 +1,11 @@
-# markdown-to-diagram-svelte
+# @markdown-to-diagram/svelte
 
 This package provides Svelte components (`RadialTree` and `ForceGraph`) to visualize diagrams parsed from Markdown content using the core `markdown-to-diagram` package.
 
 ## Installation
 
 ```bash
-npm install markdown-to-diagram-svelte markdown-to-diagram
+npm install @markdown-to-diagram/svelte @markdown-to-diagram/core
 ```
 
 ## Usage
@@ -14,8 +14,8 @@ Here is an example of how to use the components in your Svelte application:
 
 ```svelte
 <script lang="ts">
-  import { parseToTree } from 'markdown-to-diagram';
-  import { RadialTree, ForceGraph } from 'markdown-to-diagram-svelte';
+  import { parseToTree } from '@markdown-to-diagram/core';
+  import { RadialTree, ForceGraph } from '@markdown-to-diagram/svelte';
 
   const markdownContent = `
 # Root Node
