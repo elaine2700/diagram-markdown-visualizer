@@ -2,6 +2,8 @@
 
 A modular toolkit for parsing Markdown documents and visualizing their heading structure as interactive diagrams.
 
+![Diagram Markdown Visualizer Demo](docs/screenshots/demo-app.png)
+
 This repository is split into two packages:
 - **`markdown-to-diagram`**: For parsing markdown into tree structures and calculating layouts.
 - **`markdown-to-diagram-svelte`**: A set of Svelte components for rendering the calculated layouts as interactive SVG diagrams.
@@ -82,10 +84,19 @@ Renders a neat, hierarchical radial tree.
 <RadialTree 
     {tree} 
     title="My Diagram" 
-    showContent={true} 
+    showContent={false} 
     nodeShape="rectangle" 
 />
 ```
+
+**Rectangle Shape:**
+![Radial Tree with Rectangle Nodes](docs/screenshots/radial-tree-rectangle.png)
+
+**Ellipse Shape:**
+![Radial Tree with Ellipse Nodes](docs/screenshots/radial-tree-ellipse.png)
+
+**With Markdown Content Displayed (`showContent={true}`):**
+![Radial Tree with Content](docs/screenshots/radial-tree-content.png)
 
 #### Force Graph
 Renders an interactive, draggable force-directed graph. 
@@ -102,10 +113,14 @@ Renders an interactive, draggable force-directed graph.
 <ForceGraph 
     {tree} 
     title="My Interactive Graph" 
-    showContent={true}
-    nodeShape="ellipse" 
+    showContent={false}
+    nodeShape="rectangle" 
 />
 ```
+
+| Rectangle Nodes | Ellipse Nodes |
+|:---:|:---:|
+| ![Force Graph - Rectangle Nodes](docs/screenshots/force-graph-rectangle.png) | ![Force Graph - Ellipse Nodes](docs/screenshots/force-graph-ellipse.png) |
 
 ### Component Props
 
