@@ -37,11 +37,9 @@ jobs:
         run: npm run build:core
 
       - name: Create Release Pull Request or Publish Core
-        id: changesets
         uses: changesets/action@v3
         with:
           publish: npm run release
-          title: "Version Packages (Core)"
           createGithubReleases: true
         env:
           NPM_CONFIG_PROVENANCE: true
