@@ -4,6 +4,9 @@ on:
   pull_request:
     branches:
       - main
+    paths:
+      - 'packages/core/**'
+      - 'packages/svelte/**'
 
 jobs:
   check-changeset:
