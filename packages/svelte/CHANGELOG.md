@@ -1,5 +1,11 @@
 # @markdown-to-diagram/svelte
 
+## 1.0.1
+
+### Patch Changes
+
+- 3ebb3b6: enhance demo page controls and styles
+
 ## 1.0.0
 
 ### Major Changes
