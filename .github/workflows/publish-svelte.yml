@@ -1,0 +1,44 @@
+name: Publish Svelte
+
+on:
+  push:
+    branches: 
+      - main
+    paths:
+      - 'packages/svelte/**'
+
+concurrency: publish-svelte-${{ github.ref }}
+
+jobs:
+  release-svelte:
+    name: Release Svelte
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+      pull-requests: write
+      
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'latest'
+
+      - name: Install Dependencies
+        run: npm i && npm ci --include=optional
+
+      - name: Build Svelte
+        run: npm run build:svelte
+
+      - name: Create Release Pull Request or Publish Svelte
+        id: changesets
+        uses: changesets/action@v1
+        with:
+          publish: npm run release
+          title: "Version Packages (Svelte)"
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

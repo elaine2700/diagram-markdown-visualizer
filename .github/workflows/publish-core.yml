@@ -1,4 +1,4 @@
-name: Publish Package
+name: Publish Core
 
 on:
   push:
@@ -6,13 +6,12 @@ on:
       - main
     paths:
       - 'packages/core/**'
-      - 'packages/svelte/**'
 
-concurrency: ${{ github.workflow }}-${{ github.ref }}
+concurrency: publish-core-${{ github.ref }}
 
 jobs:
-  release:
-    name: Release
+  release-core:
+    name: Release Core
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -31,17 +30,15 @@ jobs:
       - name: Install Dependencies
         run: npm i && npm ci --include=optional
 
-      - name: Build Packages
-        run: npm run build
+      - name: Build Core
+        run: npm run build:core
 
-      - name: Create Release Pull Request or Publish
+      - name: Create Release Pull Request or Publish Core
         id: changesets
         uses: changesets/action@v1
         with:
           publish: npm run release
+          title: "Version Packages (Core)"
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-
-      
