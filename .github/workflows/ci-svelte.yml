@@ -10,6 +10,7 @@ on:
 jobs:
   check-svelte:
     name: Check Changeset & Build Svelte
+    if: "!startsWith(github.head_ref, 'changeset-release')"
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
