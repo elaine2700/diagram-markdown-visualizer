@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - 'packages/svelte/**'
+  workflow_dispatch:
 
 concurrency: publish-svelte-${{ github.ref }}
 
@@ -21,14 +22,17 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 'latest'
+          registry-url: 'https://registry.npmjs.org'
 
       - name: Install Dependencies
-        run: npm i && npm ci --include=optional
+        run: npm ci --include=optional
 
       - name: Build Svelte
         run: npm run build:svelte
@@ -39,6 +43,8 @@ jobs:
         with:
           publish: npm run release
           title: "Version Packages (Svelte)"
+          createGithubReleases: true
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

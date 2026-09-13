@@ -60,13 +60,33 @@ The repository uses independent GitHub Actions workflows for each package:
    - On push to `main`, only the workflow corresponding to the package with changes will trigger.
    - The Changesets action consumes pending changesets, bumps versions in `package.json`, updates `CHANGELOG.md`, and opens a **"Version Packages"** PR (or updates an existing one).
 
-3. **Release to npm**:
+3. **Release to npm & Create GitHub Release**:
    - Review and merge the **"Version Packages"** PR into `main`.
-   - The respective workflow runs `npm run release` (`changeset publish`), publishing only the updated package(s) to npm.
+   - The respective workflow runs `npm run release` (`changeset publish`).
+   - The package is published to the npm registry with provenance.
+   - The workflow pushes the git tag (e.g. `@markdown-to-diagram/svelte@1.0.1`) and automatically creates a **GitHub Release** populated with the release notes from `CHANGELOG.md`.
+   - Workflows also support manual execution via `workflow_dispatch` in the Actions tab if a re-publish or retry is ever needed.
 
 ---
 
-## 4. Manual / Local Versioning & Publishing (Optional)
+## 4. Repository Secrets & Permissions
+
+For automated publishing and GitHub release creation to work, configure the following in the GitHub repository:
+
+1. **`NPM_TOKEN` Secret**:
+   - Navigate to **Settings > Secrets and variables > Actions > Repository secrets**.
+   - Add secret `NPM_TOKEN` with an npm access token:
+     - **Classic Token (Automation)**: Recommended because it bypasses two-factor authentication prompts for CI/CD publication.
+     - OR **Granular Access Token**: Set with "Read and write" permissions for `@markdown-to-diagram` packages and scopes.
+
+2. **Workflow Permissions**:
+   - Navigate to **Settings > Actions > General > Workflow permissions**.
+   - Select **"Read and write permissions"** (allows the workflow to commit version bumps, push tags, and create GitHub Releases).
+   - Check **"Allow GitHub Actions to create and approve pull requests"** (allows Changesets to create and update the `changeset-release/main` pull request).
+
+---
+
+## 5. Manual / Local Versioning & Publishing (Optional)
 
 If you need to bump versions and publish manually without using GitHub Actions:
 
@@ -83,7 +103,7 @@ npm run release
 
 ---
 
-## 5. Helpful Commands
+## 6. Helpful Commands
 
 - **Check pending changesets**:
   ```bash

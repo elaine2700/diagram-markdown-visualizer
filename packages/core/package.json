@@ -4,7 +4,9 @@
   "description": "Core logic for parsing markdown into diagrams",
   "author": "Elaine Serrano (www.elaineserrano.com)",
   "repository": {
-    "url": "https://github.com/elaine2700/diagram-markdown-visualizer"
+    "type": "git",
+    "url": "git+https://github.com/elaine2700/diagram-markdown-visualizer.git",
+    "directory": "packages/core"
   },
   "type": "module",
   "sideEffects": false,
