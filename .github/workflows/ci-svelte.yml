@@ -1,0 +1,32 @@
+name: CI Svelte
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'packages/svelte/**'
+
+jobs:
+  check-svelte:
+    name: Check Changeset & Build Svelte
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'latest'
+
+      - name: Install Dependencies
+        run: npm i && npm ci --include=optional
+
+      - name: Verify Changeset Exists
+        run: npx changeset status --since=origin/main
+
+      - name: Build Svelte
+        run: npm run build:svelte

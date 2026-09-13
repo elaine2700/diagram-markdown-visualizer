@@ -1,4 +1,4 @@
-name: CI & Safety Checks
+name: CI Core
 
 on:
   pull_request:
@@ -6,11 +6,10 @@ on:
       - main
     paths:
       - 'packages/core/**'
-      - 'packages/svelte/**'
 
 jobs:
-  check-changeset:
-    name: Check for Changeset
+  check-core:
+    name: Check Changeset & Build Core
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
@@ -24,8 +23,10 @@ jobs:
           node-version: 'latest'
 
       - name: Install Dependencies
-        run: npm ci
+        run: npm i && npm ci --include=optional
 
       - name: Verify Changeset Exists
-        # This command fails if files changed but no changeset is found
         run: npx changeset status --since=origin/main
+
+      - name: Build Core
+        run: npm run build:core

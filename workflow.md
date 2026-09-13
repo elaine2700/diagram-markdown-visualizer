@@ -44,12 +44,16 @@ git push
 ## 3. How Publishing Works (Automated CI/CD)
 
 The repository uses independent GitHub Actions workflows for each package:
-- [`.github/workflows/publish-core.yml`](.github/workflows/publish-core.yml) (triggers **only** when changes occur in `packages/core/**`)
-- [`.github/workflows/publish-svelte.yml`](.github/workflows/publish-svelte.yml) (triggers **only** when changes occur in `packages/svelte/**`)
+- **CI Workflows**:
+  - [`.github/workflows/ci-core.yml`](.github/workflows/ci-core.yml) (runs on PRs touching `packages/core/**`)
+  - [`.github/workflows/ci-svelte.yml`](.github/workflows/ci-svelte.yml) (runs on PRs touching `packages/svelte/**`)
+- **Publish Workflows**:
+  - [`.github/workflows/publish-core.yml`](.github/workflows/publish-core.yml) (triggers **only** on push to `main` with changes in `packages/core/**`)
+  - [`.github/workflows/publish-svelte.yml`](.github/workflows/publish-svelte.yml) (triggers **only** on push to `main` with changes in `packages/svelte/**`)
 
 1. **Open & Merge Feature PR**:
    - Push your branch with the changeset file.
-   - `ci.yml` verifies that a valid changeset exists (`npx changeset status --since=origin/main`).
+   - The respective CI workflow (`ci-core.yml` or `ci-svelte.yml`) verifies that a valid changeset exists and the package builds successfully.
    - Merge your PR into `main`.
 
 2. **Automated "Version Packages" PR**:
