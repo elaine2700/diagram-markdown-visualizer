@@ -17,5 +17,8 @@
     },
     "optionalDependencies": {
         "@rollup/rollup-linux-x64-gnu": "*"
+    },
+    "dependencies": {
+        "changesets": "^1.0.2"
     }
 }
