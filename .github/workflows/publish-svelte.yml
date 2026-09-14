@@ -40,9 +40,7 @@ jobs:
         id: changesets
         uses: changesets/action@v2
         with:
-          publish: npm run release
-          title: "Version Packages (Svelte)"
-          createGithubReleases: true
-        env:
-          NPM_CONFIG_PROVENANCE: true
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          publish-script: npm run release
+          pr-title: "Version Packages (Svelte)"
+          create-github-releases: true
+          github-token: ${{ secrets.GITHUB_TOKEN }}
