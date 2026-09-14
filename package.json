@@ -13,12 +13,9 @@
         "release": "changeset publish"
     },
     "devDependencies": {
-        "@changesets/cli": "^2.30.0"
+        "@changesets/cli": "^3.0.2"
     },
     "optionalDependencies": {
         "@rollup/rollup-linux-x64-gnu": "*"
-    },
-    "dependencies": {
-        "changesets": "^1.0.2"
     }
 }

@@ -40,6 +40,6 @@ jobs:
         uses: changesets/action@v2
         with:
           publish-script: npm run release
-          pr-title: "Version Packages (Svelte)"
+          pr-title: "Version Packages (Core)"
           create-github-releases: true
           github-token: ${{ secrets.GITHUB_TOKEN }}
