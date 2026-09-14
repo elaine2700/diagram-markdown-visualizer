@@ -38,7 +38,7 @@ jobs:
 
       - name: Create Release Pull Request or Publish Svelte
         id: changesets
-        uses: changesets/action@v3
+        uses: changesets/action@v2
         with:
           publish: npm run release
           title: "Version Packages (Svelte)"
